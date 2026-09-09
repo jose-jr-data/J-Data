@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Gerencial — Fluency Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg: #EEF2F6;
+  --card: #FFFFFF;
+  --ink: #1E2A38;
+  --muted: #6B7A8D;
+  --line: #E3E9EF;
+  --brand: #256D69;
+  --brand-light: #DCEEEC;
+  --amber: #C8863A;
+  --amber-light: #FBEEDD;
+  --green: #3C8A5B;
+  --green-light: #E3F3E7;
+  --red: #C1573F;
+  --red-light: #FBE9E5;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+.page{
+  max-width:1360px;
+  margin:0 auto;
+  padding:28px 32px 48px;
+}
+
+/* ---------- HEADER ---------- */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.mark{
+  width:38px;height:38px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--brand),#3E9B94);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:16px;
+}
+.brand h1{
+  font-family:'Sora',sans-serif;
+  font-size:19px;
+  font-weight:600;
+  margin:0;
+  line-height:1.2;
+}
+.brand p{
+  margin:0;
+  font-size:12.5px;
+  color:var(--muted);
+}
+.controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.pill{
+  background:var(--card);
+  border:1px solid var(--line);
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:13px;
+  color:var(--ink);
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.pill.active{
+  background:var(--brand);
+  color:#fff;
+  border-color:var(--brand);
+}
+
+/* ---------- KPI ROW ---------- */
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
+}
+.kpi{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px 20px;
+}
+.kpi-label{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.kpi-value{
+  font-family:'Sora',sans-serif;
+  font-size:26px;
+  font-weight:600;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+.kpi-sub{
+  font-size:11.5px;
+  color:var(--muted);
+  font-weight:500;
+}
+.delta{
+  font-size:12px;
+  font-weight:600;
+  padding:2px 8px;
+  border-radius:20px;
+  display:inline-block;
+  margin-top:9px;
+}
+.delta.up{background:var(--green-light);color:var(--green);}
+.delta.down{background:var(--red-light);color:var(--red);}
+.delta.warn{background:var(--amber-light);color:var(--amber);}
+
+/* ---------- SECTION GRID ---------- */
+.section-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.col-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+.dot{width:9px;height:9px;border-radius:50%;}
+.dot.blue{background:var(--brand);}
+.dot.amber{background:var(--amber);}
+.dot.green{background:var(--green);}
+.col-head h2{
+  font-family:'Sora',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  margin:0;
+}
+.col-head span{
+  font-size:11.5px;
+  color:var(--muted);
+  margin-left:auto;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 18px;
+  margin-bottom:12px;
+}
+.card-title{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-bottom:10px;
+  font-weight:500;
+}
+.two-up{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.two-up .card{margin-bottom:0;}
+
+/* number + trend row */
+.num-row{display:flex;align-items:baseline;gap:8px;}
+.num-row .big{font-family:'Sora',sans-serif;font-size:22px;font-weight:600;}
+.trend-arrow{font-size:12px;font-weight:600;}
+.trend-arrow.up{color:var(--green);}
+.trend-arrow.down{color:var(--red);}
+.trend-arrow.downgood{color:var(--green);}
+
+/* bar trend chart */
+.bars{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:64px;
+  margin-top:6px;
+}
+.bars .bar{
+  flex:1;
+  background:var(--brand-light);
+  border-radius:4px 4px 0 0;
+  position:relative;
+}
+.bars .bar.last{background:var(--brand);}
+.bar-labels{
+  display:flex;
+  gap:6px;
+  margin-top:5px;
+}
+.bar-labels span{
+  flex:1;
+  text-align:center;
+  font-size:10px;
+  color:var(--muted);
+}
+
+/* progress ring */
+.ring-wrap{display:flex;align-items:center;gap:12px;}
+.ring-num{font-family:'Sora',sans-serif;font-size:20px;font-weight:600;}
+.ring-cap{font-size:11px;color:var(--muted);}
+
+/* bullet / goal bar */
+.bullet{
+  height:10px;
+  background:#EDF1F5;
+  border-radius:6px;
+  position:relative;
+  margin-top:10px;
+  overflow:visible;
+}
+.bullet-fill{
+  height:100%;
+  border-radius:6px;
+  background:var(--brand);
+}
+.bullet-target{
+  position:absolute;
+  top:-3px;
+  bottom:-3px;
+  width:2px;
+  background:var(--ink);
+}
+.bullet-foot{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* horizontal mini bars (channel growth) */
+.hbar-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px 0;
+}
+.hbar-label{width:82px;font-size:11.5px;color:var(--muted);flex-shrink:0;}
+.hbar-track{flex:1;height:8px;background:#EDF1F5;border-radius:5px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:5px;}
+.hbar-val{width:38px;text-align:right;font-size:11.5px;font-weight:600;flex-shrink:0;}
+
+/* donut legend */
+.donut-row{display:flex;align-items:center;gap:16px;}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:11.5px;}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--ink);}
+.legend-item .sw{width:8px;height:8px;border-radius:2px;}
+.legend-item b{margin-left:auto;font-weight:600;}
+
+/* stars */
+.stars{color:#D9A441;font-size:15px;letter-spacing:1px;}
+
+.foot-note{
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:26px;
+}
+
+@media (max-width:980px){
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .section-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">FH</div>
+      <div>
+        <h1>Painel Gerencial — Fluency Hub</h1>
+        <p>Comercial · Marketing · Customer Success</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="pill">Ano letivo 2026</div>
+      <div class="pill active">Setembro / 2026</div>
+    </div>
+  </div>
+
+  <!-- KPI OVERVIEW -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Novas matrículas (mês)</div>
+      <div class="kpi-value">142 <span class="kpi-sub">/ meta 160</span></div>
+      <div class="delta warn">88,8% da meta</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Taxa de conversão</div>
+      <div class="kpi-value">18,4%</div>
+      <div class="delta up">▲ 2,3 p.p. vs mês anterior</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">CPL médio</div>
+      <div class="kpi-value">R$ 24,80</div>
+      <div class="delta up">▼ 11% vs mês anterior</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Cancelamentos</div>
+      <div class="kpi-value">9 <span class="kpi-sub">/ limite 12</span></div>
+      <div class="delta up">▼ 18% vs mês anterior</div>
+    </div>
+  </div>
+
+  <!-- THREE COLUMNS -->
+  <div class="section-grid">
+
+    <!-- COMERCIAL -->
+    <div>
+      <div class="col-head">
+        <span class="dot blue"></span>
+        <h2>Comercial</h2>
+        <span>set/26</span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Novos leads — últimos 6 meses</div>
+        <div class="num-row"><span class="big">612</span><span class="trend-arrow up">▲ 14%</span></div>
+        <div class="bars">
+          <div class="bar" style="height:56%"></div>
+          <div class="bar" style="height:61%"></div>
+          <div class="bar" style="height:65%"></div>
+          <div class="bar" style="height:70%"></div>
+          <div class="bar" style="height:79%"></div>
+          <div class="bar last" style="height:100%"></div>
+        </div>
+        <div class="bar-labels">
+          <span>Abr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Set</span>
+        </div>
+      </div>
+
+      <div class="two-up" style="margin-bottom:12px;">
+        <div class="card">
+          <div class="card-title">Reuniões realizadas</div>
+          <div class="ring-wrap">
+            <svg width="58" height="58" viewBox="0 0 58 58">
+              <circle cx="29" cy="29" r="24" fill="none" stroke="#EDF1F5" stroke-width="7"/>
+              <circle cx="29" cy="29" r="24" fill="none" stroke="#256D69" stroke-width="7"
+                stroke-dasharray="150.8" stroke-dashoffset="13.6" stroke-linecap="round"
+                transform="rotate(-90 29 29)"/>
+            </svg>
+            <div>
+              <div class="ring-num">238</div>
+              <div class="ring-cap">de 260 meta</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Taxa de conversão</div>
+          <div class="ring-wrap">
+            <svg width="58" height="58" viewBox="0 0 58 58">
+              <circle cx="29" cy="29" r="24" fill="none" stroke="#EDF1F5" stroke-width="7"/>
+              <circle cx="29" cy="29" r="24" fill="none" stroke="#3C8A5B" stroke-width="7"
+                stroke-dasharray="150.8" stroke-dashoffset="58.8" stroke-linecap="round"
+                transform="rotate(-90 29 29)"/>
+            </svg>
+            <div>
+              <div class="ring-num">18,4%</div>
+              <div class="ring-cap">meta 25%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Matrículas x meta mensal</div>
+        <div class="num-row"><span class="big">142</span><span class="kpi-sub">/ 160</span></div>
+        <div class="bullet">
+          <div class="bullet-fill" style="width:88.8%"></div>
+          <div class="bullet-target" style="left:100%"></div>
+        </div>
+        <div class="bullet-foot"><span>0</span><span>meta 160</span></div>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div>
+      <div class="col-head">
+        <span class="dot amber"></span>
+        <h2>Marketing</h2>
+        <span>set/26</span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">CPL — custo por lead</div>
+        <div class="num-row"><span class="big">R$ 24,80</span><span class="trend-arrow downgood">▼ 11%</span></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Meta: até R$ 28,00 — dentro da meta</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Leads por origem</div>
+        <div class="donut-row">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <g transform="rotate(-90 44 44)">
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#256D69" stroke-width="14"
+                stroke-dasharray="81.2 213.6" stroke-dashoffset="0"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#C8863A" stroke-width="14"
+                stroke-dasharray="57.7 237.1" stroke-dashoffset="-81.2"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#3C8A5B" stroke-width="14"
+                stroke-dasharray="38.5 256.3" stroke-dashoffset="-138.9"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#B8C2CE" stroke-width="14"
+                stroke-dasharray="36.4 258.4" stroke-dashoffset="-177.4"/>
+            </g>
+          </svg>
+          <div class="legend">
+            <div class="legend-item"><span class="sw" style="background:#256D69"></span>Instagram <b>38%</b></div>
+            <div class="legend-item"><span class="sw" style="background:#C8863A"></span>Google Ads <b>27%</b></div>
+            <div class="legend-item"><span class="sw" style="background:#3C8A5B"></span>Indicação <b>18%</b></div>
+            <div class="legend-item"><span class="sw" style="background:#B8C2CE"></span>Orgânico <b>17%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Crescimento por canal (MoM)</div>
+        <div class="hbar-row">
+          <div class="hbar-label">Instagram</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:78%;background:#3C8A5B"></div></div>
+          <div class="hbar-val" style="color:#3C8A5B">+22%</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Google Ads</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:42%;background:#3C8A5B"></div></div>
+          <div class="hbar-val" style="color:#3C8A5B">+9%</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Indicação</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:58%;background:#3C8A5B"></div></div>
+          <div class="hbar-val" style="color:#3C8A5B">+15%</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Orgânico</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:22%;background:#C1573F"></div></div>
+          <div class="hbar-val" style="color:#C1573F">−4%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Conteúdos publicados x meta</div>
+        <div class="num-row"><span class="big">22</span><span class="kpi-sub">/ 25</span></div>
+        <div class="bullet">
+          <div class="bullet-fill" style="width:88%;background:#C8863A"></div>
+          <div class="bullet-target" style="left:100%"></div>
+        </div>
+        <div class="bullet-foot"><span>0</span><span>meta 25</span></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMER SUCCESS -->
+    <div>
+      <div class="col-head">
+        <span class="dot green"></span>
+        <h2>Customer Success</h2>
+        <span>set/26</span>
+      </div>
+
+      <div class="two-up" style="margin-bottom:12px;">
+        <div class="card">
+          <div class="card-title">Novos alunos</div>
+          <div class="num-row"><span class="big">142</span></div>
+          <div class="delta up" style="margin-top:8px;">▲ 6%</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Cancelamentos</div>
+          <div class="num-row"><span class="big">9</span></div>
+          <div class="delta up" style="margin-top:8px;">▼ 18%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recuperação de leads</div>
+        <div class="ring-wrap">
+          <svg width="58" height="58" viewBox="0 0 58 58">
+            <circle cx="29" cy="29" r="24" fill="none" stroke="#EDF1F5" stroke-width="7"/>
+            <circle cx="29" cy="29" r="24" fill="none" stroke="#256D69" stroke-width="7"
+              stroke-dasharray="150.8" stroke-dashoffset="99.5" stroke-linecap="round"
+              transform="rotate(-90 29 29)"/>
+          </svg>
+          <div>
+            <div class="ring-num">34%</div>
+            <div class="ring-cap">leads frios recuperados</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-up">
+        <div class="card">
+          <div class="card-title">Indicações no mês</div>
+          <div class="num-row"><span class="big">27</span><span class="kpi-sub">alunos</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Avaliações Google</div>
+          <div class="num-row"><span class="big">4,8</span><span class="stars">★★★★★</span></div>
+          <div class="kpi-sub" style="margin-top:4px;">312 avaliações</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot-note">J Data — Consultoria e Business Intelligence</div>
+
+</div>
+</body>
+</html>
